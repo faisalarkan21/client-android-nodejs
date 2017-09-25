@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
     Bundle getDataLoginAct;
     String nm_pembeli, email_pembeli, id_pembeli;
     SessionManager session;
+    TextView name, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +32,19 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         session = new SessionManager(this);
-
         nm_pembeli =  session.getNm_pembeli();
-        final TextView test  = (TextView) findViewById(R.id.test);
-        test.setText(nm_pembeli);
+        email_pembeli =  session.getEmail_pembeli();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+
+        name = (TextView)header.findViewById(R.id.txt_nm_pembeli);
+        email = (TextView)header.findViewById(R.id.txt_email_pembeli);
+        name.setText(nm_pembeli);
+        email.setText(email_pembeli);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -42,8 +52,8 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -65,17 +75,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_pembeli_data) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_ketentuan) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_pembeli_validasi) {
 
         }
 

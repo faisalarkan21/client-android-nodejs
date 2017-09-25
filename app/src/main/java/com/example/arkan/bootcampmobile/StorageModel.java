@@ -6,7 +6,7 @@ package com.example.arkan.bootcampmobile;
 
 public class StorageModel {
 
-    private String urlApi = "192.168.56.1:3000";
+    private String urlApi = "192.168.56.1:3000/";
     private int idPembeli;
     private String nm_pembeli;
     private String email_pembeli;

@@ -48,6 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Masukan email"
+                android:text="faisalarkan21@gmail.com"
 
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
@@ -65,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Masukan password"
                 android:inputType="textPassword"
+                android:text="makan"
                 android:paddingTop="30px" />
         </android.support.design.widget.TextInputLayout>
 
