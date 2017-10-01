@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.arkan.bootcampmobile.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="com.example.arkan.bootcampmobile.ValidasiTiket"
+    tools:showIn="@layout/app_bar_validasi_tiket">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,10 +69,13 @@
             android:text="" />
 
         <Button
-            android:id="@+id/btn_update"
+            android:id="@+id/btn_validasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ubah Data" />
+            android:text="Kirim Tiket Validasi" />
 
     </LinearLayout>
+
+
 </ScrollView>
+

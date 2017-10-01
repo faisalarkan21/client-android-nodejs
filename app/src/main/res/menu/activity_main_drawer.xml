@@ -4,13 +4,10 @@
     <item android:title="Menu Pembeli">
         <menu>
             <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_home"
-                    android:icon="@drawable/ic_home_black_24dp"
-                    android:title="Dashboard" />
+
                 <item
                     android:id="@+id/nav_pembeli_data"
-                    android:icon="@drawable/ic_dashboard_black_24dp"
+                    android:icon="@drawable/ic_home_black_24dp"
                     android:title="Data Pembeli" />
                 <item
                     android:id="@+id/nav_ketentuan"

@@ -1,20 +1,17 @@
 package com.example.arkan.bootcampmobile;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,42 +25,49 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class ValidasiTiket extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    Bundle getDataLoginAct;
-    String nm_pembeli, email_pembeli, id_pembeli;
+    TextView nameSideBar, emailSideBar, name, email, hp, harga_tiket, pilihan_bank;
+    Button btn_validasi;
     SessionManager session;
-    TextView nameSideBar, emailSideBar,name, email, hp, harga_tiket, pilihan_bank;
-    Button btn_sumbit;
+    String nm_pembeli, email_pembeli, id_pembeli;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_validasi_tiket);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
 
         session = new SessionManager(this);
         nm_pembeli =  session.getNm_pembeli();
         email_pembeli =  session.getEmail_pembeli();
 
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View header=navigationView.getHeaderView(0);
-
         nameSideBar = (TextView)header.findViewById(R.id.txt_nm_pembeli);
         emailSideBar = (TextView)header.findViewById(R.id.txt_email_pembeli);
         nameSideBar.setText(nm_pembeli);
         emailSideBar.setText(email_pembeli);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        session = new SessionManager(this);
+
 
         name = (TextView) findViewById(R.id.txt_nama);
         email = (TextView) findViewById(R.id.txt_email);
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         harga_tiket = (TextView) findViewById(R.id.txt_harga);
         pilihan_bank = (TextView) findViewById(R.id.txt_pilihan_bank);
 
-        String url = "http://192.168.56.1:3000/data-user/" + session.getId_pembeli();
+        String url = "http://192.168.56.1:3000/data-user-validasi/" + session.getId_pembeli();
 
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
@@ -85,6 +89,9 @@ public class MainActivity extends AppCompatActivity
 
                             JSONObject dataPembeli = result.getJSONObject("dataPembeli");
                             JSONObject detailPembeli = result.getJSONObject("detailPembeli");
+                            boolean statusValidasi = Boolean.parseBoolean(result.getString("statusValidasi"));
+
+                            btn_validasi.setEnabled(!statusValidasi);
 
                             name.setText(dataPembeli.getString("nm_pembeli"));
                             email.setText(dataPembeli.getString("email_pembeli"));
@@ -93,7 +100,9 @@ public class MainActivity extends AppCompatActivity
                             harga_tiket.setText(detailPembeli.getString("harga_tiket"));
                             pilihan_bank.setText(detailPembeli.getString("pilihan_bank"));
 
-                        }catch (Exception e){
+
+
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -102,7 +111,7 @@ public class MainActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ValidasiTiket.this, error.toString(), Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                     }
                 });
@@ -110,15 +119,16 @@ public class MainActivity extends AppCompatActivity
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-        btn_sumbit = (Button) findViewById(R.id.btn_update);
-        btn_sumbit.setOnClickListener(new View.OnClickListener(){
+
+        btn_validasi = (Button) findViewById(R.id.btn_validasi);
+        btn_validasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                RequestQueue queue = Volley.newRequestQueue(ValidasiTiket.this);
                 //this is the url where you want to send the request
                 //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
-                String url = "http://192.168.56.1:3000/data-user/" + session.getId_pembeli();
+                String url = "http://192.168.56.1:3000/data-user-validasi/" + session.getId_pembeli();
 
                 // Request a string response from the provided URL.
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -131,7 +141,7 @@ public class MainActivity extends AppCompatActivity
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, error.toString(),
+                        Toast.makeText(ValidasiTiket.this, error.toString(),
                                 Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                     }
@@ -141,9 +151,7 @@ public class MainActivity extends AppCompatActivity
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
                         params.clear();
-                        params.put("nama", name.getText().toString());
-                        params.put("email", email.getText().toString());
-                        params.put("hp", hp.getText().toString());
+                        params.put("pilihan_bank", pilihan_bank.getText().toString());
                         return params;
                     }
                 };
@@ -158,31 +166,26 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-
-
     }
 
-    public void getCallback (String response){
+    public void getCallback(String response) {
 
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean status = Boolean.parseBoolean(jsonObject.getString("success"));
 
-            String result = status ? "Data Tersimpan" : "Update Data Gagal!";
-            Toast.makeText(MainActivity.this,  result, Toast.LENGTH_SHORT).show();
+            String result = status ? "Tiket Terkirim" : "Tiket Gagal Terkirim!";
+            Toast.makeText(ValidasiTiket.this, result, Toast.LENGTH_SHORT).show();
+
+            finish();
+            startActivity(getIntent());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -195,8 +198,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -205,14 +206,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_pembeli_data) {
 
-            // Handle the camera action
-        } else if (id == R.id.nav_pembeli_validasi) {
-
-            Intent dashboard = new Intent(MainActivity.this, ValidasiTiket.class);
+            Intent dataPembeli = new Intent(ValidasiTiket.this, MainActivity.class);
 
 
             // Staring MainActivity
-            startActivity(dashboard);
+            startActivity(dataPembeli);
+            // Handle the camera action
+        } else if (id == R.id.nav_pembeli_validasi) {
+
 
         }
 
@@ -221,3 +222,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 }
+
+
+
+

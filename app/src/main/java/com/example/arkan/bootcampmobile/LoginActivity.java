@@ -86,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                     //this is the url where you want to send the request
                     //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
-//                    String urlAPI = "http://192.168.56.1:3000/mobile-login";
-                    String urlAPI = "http://192.168.1.100:3000/mobile-login";
+                    String urlAPI = "http://192.168.56.1:3000/mobile-login";
+//                    String urlAPI = "http://192.168.1.100:3000/mobile-login";
 
                     // Request a string response from the provided URL.
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, urlAPI,
